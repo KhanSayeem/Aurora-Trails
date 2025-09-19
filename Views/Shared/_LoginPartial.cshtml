@@ -1,52 +1,54 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using TourismApp.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav align-items-center">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle d-flex align-items-center text-white" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fas fa-user-circle fa-lg me-1"></i>
-            <span>@User.Identity?.Name</span>
-            @if (User.IsInRole("Tourist"))
-            {
-                <span class="badge bg-success ms-2 user-role-badge">Tourist</span>
-            }
-            else if (User.IsInRole("Agency"))
-            {
-                <span class="badge bg-info ms-2 user-role-badge">Agency</span>
-            }
-        </a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <li>
-                <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                    <i class="fas fa-cog me-2"></i>Account Settings
-                </a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                    <button type="submit" class="dropdown-item">
-                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+    var displayName = User.Identity?.Name ?? "Account";
+    var initials = string.Join(string.Empty, displayName.Split(' ', StringSplitOptions.RemoveEmptyEntries).Select(n => n[0]).Take(2)).ToUpperInvariant();
+    if (string.IsNullOrWhiteSpace(initials))
+    {
+        initials = "TA";
+    }
+
+    var roleBadge = User.IsInRole("Agency") ? "Agency" : User.IsInRole("Tourist") ? "Tourist" : "Member";
+    string? profileAction = User.IsInRole("Agency") ? "Agency" : User.IsInRole("Tourist") ? "Tourist" : null;
+
+    <details class="group relative" data-user-menu>
+        <summary class="flex cursor-pointer items-center gap-3 rounded-2xl border border-slate-200 bg-white px-3 py-2 text-left text-sm font-medium text-slate-700 shadow-sm transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40">
+            <span class="grid h-9 w-9 place-items-center rounded-xl bg-primary/10 text-sm font-semibold text-primary">@initials</span>
+            <span class="hidden flex-col leading-tight md:flex">
+                <span class="font-semibold text-slate-900">@displayName</span>
+                <span class="text-xs font-medium uppercase tracking-wide text-slate-400">@roleBadge</span>
+            </span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="ml-auto h-4 w-4 text-slate-400 transition group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+            </svg>
+        </summary>
+        <div class="absolute right-0 mt-3 w-60 rounded-2xl border border-slate-200 bg-white p-3 shadow-card">
+            <div class="grid gap-1 text-sm font-medium text-slate-600">
+                <a class="nav-menu-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Account settings</a>
+                @if (!string.IsNullOrEmpty(profileAction))
+                {
+                    <a class="nav-menu-item" asp-controller="Profile" asp-action="@profileAction">View profile</a>
+                }
+                <form class="mt-1" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                    <button type="submit" class="nav-menu-item w-full justify-between text-left">
+                        <span>Sign out</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+                        </svg>
                     </button>
                 </form>
-            </li>
-        </ul>
-    </li>
+            </div>
+        </div>
+    </details>
 }
 else
 {
-    <li class="nav-item me-2">
-        <a class="nav-link btn btn-outline-light text-white" asp-area="Identity" asp-page="/Account/Register">
-            <i class="fas fa-user-plus me-1"></i>Register
-        </a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link btn btn-outline-light text-white" asp-area="Identity" asp-page="/Account/Login">
-            <i class="fas fa-sign-in-alt me-1"></i>Login
-        </a>
-    </li>
+    <div class="flex items-center gap-2">
+        <a class="btn-outline px-4 py-2" asp-area="Identity" asp-page="/Account/Login">Sign in</a>
+        <a class="btn-primary px-4 py-2" asp-area="Identity" asp-page="/Account/Register">Create account</a>
+    </div>
 }
-</ul>

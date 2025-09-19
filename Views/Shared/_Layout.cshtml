@@ -1,164 +1,226 @@
-﻿@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Identity
 @using TourismApp.Models
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString() ?? string.Empty;
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString() ?? string.Empty;
+    bool isTourist = User.IsInRole("Tourist");
+    bool isAgency = User.IsInRole("Agency");
+}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TourismApp</title>
-    <script type="importmap"></script>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/TourismApp.styles.css" asp-append-version="true" />
-    <style>
-        .navbar-brand {
-            font-weight: 700;
-            font-size: 1.5rem;
-        }
-        
-        .hero-section {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            color: white;
-            padding: 3rem 0;
-            margin-bottom: 2rem;
-        }
-        
-        .feature-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            height: 100%;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .footer {
-            background-color: #f8f9fa;
-            padding: 1rem 0;
-        }
-        
-        .user-role-badge {
-            font-size: 0.75rem;
-        }
-        
-        main {
-            flex: 1;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light" />
+    <title>@ViewData["Title"] - Aurora Trails</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/dist/app.css" asp-append-version="true" />
+    <script>
+        document.documentElement.classList.remove('no-js');
+    </script>
 </head>
-<body class="d-flex flex-column min-vh-100">
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
-            <div class="container">
-                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <i class="fas fa-globe-americas me-2"></i>
-                    <span class="fw-bold">TourismApp</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" 
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="fas fa-home me-1"></i>Home
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-controller="Home" asp-action="Privacy">
-                                <i class="fas fa-lock me-1"></i>Privacy
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-controller="Tours" asp-action="Index">
-                                <i class="fas fa-map-signs me-1"></i>Browse Tours
-                            </a>
-                        </li>
-                        @if (User.IsInRole("Agency"))
-                        {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link text-white dropdown-toggle" href="#" id="agencyDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-building me-1"></i>Agency Dashboard
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="agencyDropdown">
-                                <li><a class="dropdown-item" asp-controller="Home" asp-action="AgencyDashboard">Dashboard</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Tours" asp-action="MyPackages">My Packages</a></li>
-                                <li><a class="dropdown-item" asp-controller="Bookings" asp-action="Manage">Manage Bookings</a></li>
-                                <li><a class="dropdown-item" asp-controller="Feedbacks" asp-action="Agency">Customer Feedbacks</a></li>
-                                <li><a class="dropdown-item" asp-controller="Reports" asp-action="Index">Reports</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Profile" asp-action="Agency">My Profile</a></li>
-                            </ul>
-                        </li>
-                        }
-                        @if (User.IsInRole("Tourist"))
-                        {
-                        <li class="nav-item dropdown">
-                            <a class="nav-link text-white dropdown-toggle" href="#" id="touristDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user me-1"></i>My Account
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="touristDropdown">
-                                <li><a class="dropdown-item" asp-controller="Bookings" asp-action="Index">My Bookings</a></li>
-                                <li><a class="dropdown-item" asp-controller="Feedbacks" asp-action="Index">My Feedbacks</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" asp-controller="Profile" asp-action="Tourist">My Profile</a></li>
-                            </ul>
-                        </li>
-                        }
-                    </ul>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <div class="flex min-h-screen flex-col">
+        <header class="sticky top-0 z-40 border-b border-slate-200 bg-white/80 backdrop-blur">
+            <div class="container flex h-16 items-center justify-between gap-4">
+                <div class="flex flex-1 items-center gap-3">
+                    <button type="button" class="inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white p-2 text-slate-600 transition hover:border-slate-300 hover:text-slate-900 md:hidden" data-mobile-nav>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                    <a class="flex items-center gap-3" asp-area="" asp-controller="Home" asp-action="Index">
+                        <span class="grid h-10 w-10 place-items-center rounded-2xl bg-primary text-sm font-semibold uppercase tracking-wide text-primary-foreground shadow-card">AT</span>
+                        <div class="flex flex-col">
+                            <span class="text-base font-semibold text-slate-900">Aurora Trails</span>
+                            <span class="text-xs font-medium uppercase tracking-[0.2em] text-slate-400">Travel smarter</span>
+                        </div>
+                    </a>
+                </div>
+                <nav class="hidden items-center gap-6 md:flex">
+                    <a class="nav-link @(currentController == "Home" && currentAction == "Index" ? "nav-link-active" : string.Empty)" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    <a class="nav-link @(currentController == "Tours" ? "nav-link-active" : string.Empty)" asp-controller="Tours" asp-action="Index">Tours</a>
+                    <a class="nav-link @(currentController == "Home" && currentAction == "Privacy" ? "nav-link-active" : string.Empty)" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+
+                    @if (isAgency)
+                    {
+                        <details class="group relative" data-nav-dropdown>
+                            <summary class="nav-link flex cursor-pointer list-none items-center gap-2 text-sm">
+                                <span>Agency</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400 transition group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                                </svg>
+                            </summary>
+                            <div class="absolute left-0 mt-3 w-64 rounded-2xl border border-slate-200 bg-white p-3 shadow-card">
+                                <div class="grid gap-1">
+                                    <a class="nav-menu-item" asp-controller="Home" asp-action="AgencyDashboard">Dashboard</a>
+                                    <a class="nav-menu-item" asp-controller="Tours" asp-action="MyPackages">My Packages</a>
+                                    <a class="nav-menu-item" asp-controller="Bookings" asp-action="Manage">Manage Bookings</a>
+                                    <a class="nav-menu-item" asp-controller="Feedbacks" asp-action="Agency">Customer Feedback</a>
+                                    <a class="nav-menu-item" asp-controller="Reports" asp-action="Index">Reports</a>
+                                    <a class="nav-menu-item" asp-controller="Profile" asp-action="Agency">Agency Profile</a>
+                                </div>
+                            </div>
+                        </details>
+                    }
+
+                    @if (isTourist)
+                    {
+                        <details class="group relative" data-nav-dropdown>
+                            <summary class="nav-link flex cursor-pointer list-none items-center gap-2 text-sm">
+                                <span>My Journeys</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400 transition group-open:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m19 9-7 7-7-7" />
+                                </svg>
+                            </summary>
+                            <div class="absolute left-0 mt-3 w-60 rounded-2xl border border-slate-200 bg-white p-3 shadow-card">
+                                <div class="grid gap-1">
+                                    <a class="nav-menu-item" asp-controller="Bookings" asp-action="Index">My Bookings</a>
+                                    <a class="nav-menu-item" asp-controller="Tours" asp-action="Index">Explore Tours</a>
+                                    <a class="nav-menu-item" asp-controller="Feedbacks" asp-action="Index">My Feedback</a>
+                                    <a class="nav-menu-item" asp-controller="Profile" asp-action="Tourist">Profile</a>
+                                </div>
+                            </div>
+                        </details>
+                    }
+                </nav>
+
+                <div class="flex flex-1 items-center justify-end">
                     <partial name="_LoginPartial" />
                 </div>
             </div>
-        </nav>
-    </header>
-    
-    @if (IsSectionDefined("Hero"))
-    {
-        @RenderSection("Hero", required: false)
-    }
-    else
-    {
-        <div class="hero-section">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-8">
-                        <h1 class="display-4 fw-bold">Discover Amazing Travel Experiences</h1>
-                        <p class="lead">Explore handpicked tour packages from trusted travel agencies around the world.</p>
+            <div id="mobileNav" class="hidden border-t border-slate-200 bg-white px-4 pb-4 pt-3 md:hidden">
+                <nav class="grid gap-2 text-sm">
+                    <a class="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 shadow-sm transition hover:border-primary/40 hover:text-primary" asp-area="" asp-controller="Home" asp-action="Index">
+                        <span>Home</span>
+                        <span class="text-xs uppercase tracking-wide text-slate-400">Start</span>
+                    </a>
+                    <a class="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 shadow-sm transition hover:border-primary/40 hover:text-primary" asp-controller="Tours" asp-action="Index">
+                        <span>Tours</span>
+                        <span class="text-xs uppercase tracking-wide text-slate-400">Browse</span>
+                    </a>
+                    <a class="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-3 py-2 font-medium text-slate-700 shadow-sm transition hover:border-primary/40 hover:text-primary" asp-area="" asp-controller="Home" asp-action="Privacy">
+                        <span>Privacy</span>
+                        <span class="text-xs uppercase tracking-wide text-slate-400">Policy</span>
+                    </a>
+
+                    @if (isAgency)
+                    {
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                            <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">Agency</p>
+                            <div class="grid gap-1.5 text-sm font-medium">
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Home" asp-action="AgencyDashboard">Dashboard</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Tours" asp-action="MyPackages">My Packages</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Bookings" asp-action="Manage">Manage Bookings</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Feedbacks" asp-action="Agency">Customer Feedback</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Reports" asp-action="Index">Reports</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Profile" asp-action="Agency">Agency Profile</a>
+                            </div>
+                        </div>
+                    }
+
+                    @if (isTourist)
+                    {
+                        <div class="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                            <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-500">My Journeys</p>
+                            <div class="grid gap-1.5 text-sm font-medium">
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Bookings" asp-action="Index">My Bookings</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Tours" asp-action="Index">Explore Tours</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Feedbacks" asp-action="Index">My Feedback</a>
+                                <a class="rounded-lg px-2 py-1 text-slate-700 transition hover:bg-white hover:text-primary" asp-controller="Profile" asp-action="Tourist">Profile</a>
+                            </div>
+                        </div>
+                    }
+                </nav>
+            </div>
+        </header>
+
+        @if (IsSectionDefined("Hero"))
+        {
+            <section class="relative isolate overflow-hidden border-b border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100">
+                <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu blur-3xl" aria-hidden="true">
+                    <div class="relative left-[calc(50%-6rem)] -z-10 aspect-[1155/678] w-[36.125rem] max-w-full bg-gradient-to-tr from-primary/20 to-slate-200 opacity-60" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0% 64.9%, 17.5% 100%, 27.2% 76.8%, 76.1% 97.7%, 74.1% 44.1%);"></div>
+                </div>
+                @RenderSection("Hero", required: false)
+            </section>
+        }
+        else
+        {
+            <section class="border-b border-slate-200 bg-gradient-to-br from-white via-slate-50 to-slate-100">
+                <div class="container flex flex-col gap-4 py-16">
+                    <div class="flex flex-col gap-3">
+                        <h1 class="text-3xl font-semibold tracking-tight text-slate-900 sm:text-4xl">Discover amazing travel experiences</h1>
+                        <p class="max-w-2xl text-base text-slate-500">Explore handpicked tour packages from trusted travel agencies and curate journeys that feel bespoke, considered, and effortless.</p>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                        <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
+                            <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                            <span>Live bookings & real-time availability</span>
+                        </div>
+                        <div class="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2 shadow-sm">
+                            <span class="h-2 w-2 rounded-full bg-sky-500"></span>
+                            <span>Verified agencies & curated itineraries</span>
+                        </div>
                     </div>
                 </div>
+            </section>
+        }
+
+        <main role="main" class="flex-1">
+            <div class="container py-10">
+                @RenderBody()
             </div>
-        </div>
-    }
-    
-    <div class="container flex-grow-1">
-        <main role="main" class="pb-4">
-            @RenderBody()
         </main>
+
+        <footer class="border-t border-slate-200 bg-white">
+            <div class="container flex flex-col gap-8 py-10 md:flex-row md:items-center md:justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="grid h-10 w-10 place-items-center rounded-2xl bg-slate-900 text-sm font-semibold uppercase tracking-wide text-white">AT</span>
+                    <div>
+                        <p class="text-base font-semibold text-slate-900">Aurora Trails</p>
+                        <p class="text-sm text-slate-500">Designing calmer travel workflows since 2025.</p>
+                    </div>
+                </div>
+                <div class="flex flex-wrap items-center gap-6 text-sm text-slate-500">
+                    <span>&copy; @DateTime.UtcNow.Year Aurora Trails. All rights reserved.</span>
+                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="transition hover:text-slate-900">Privacy</a>
+                    <a asp-controller="Feedbacks" asp-action="Index" class="transition hover:text-slate-900">Share feedback</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <footer class="footer border-top mt-auto">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6">
-                    <p class="mb-0">&copy; 2025 - TourismApp</p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-decoration-none">Privacy</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            const toggle = document.querySelector('[data-mobile-nav]');
+            const menu = document.getElementById('mobileNav');
+
+            if (toggle && menu) {
+                toggle.addEventListener('click', function () {
+                    menu.classList.toggle('hidden');
+                    toggle.classList.toggle('bg-primary/10');
+                });
+            }
+
+            document.addEventListener('click', function (event) {
+                const dropdowns = document.querySelectorAll('[data-nav-dropdown]');
+                dropdowns.forEach(function (dropdown) {
+                    if (!dropdown.contains(event.target)) {
+                        dropdown.removeAttribute('open');
+                    }
+                });
+            });
+        })();
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+
+

@@ -5,29 +5,34 @@
     ViewData["Title"] = "Leave Feedback";
 }
 
-<h2>Leave Feedback</h2>
-
-<form method="post">
-    @Html.AntiForgeryToken()
-
-    <!-- Hidden field for BookingId (passed from the controller) -->
-    <input type="hidden" asp-for="BookingId" value="@ViewData["BookingId"]" />
-
-    <!-- Rating input -->
-    <div class="mb-3">
-        <label asp-for="Rating" class="form-label">Rating</label>
-        <input asp-for="Rating" class="form-control" type="number" min="1" max="5" />
-        <span asp-validation-for="Rating" class="text-danger"></span>
+<section class="max-w-2xl space-y-6">
+    <div>
+        <h1 class="heading">Leave feedback</h1>
+        <p class="section-subtitle">Share thoughtful notes with the agency managing your experience.</p>
     </div>
 
-    <!-- Comment input -->
-    <div class="mb-3">
-        <label asp-for="Comment" class="form-label">Comment</label>
-        <textarea asp-for="Comment" class="form-control"></textarea>
-        <span asp-validation-for="Comment" class="text-danger"></span>
+    <div class="card p-6">
+        <form method="post" class="space-y-6">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="BookingId" value="@ViewData["BookingId"]" />
+
+            <div class="form-field">
+                <label asp-for="Rating" class="form-label">Rating (1-5)</label>
+                <input asp-for="Rating" class="input" type="number" min="1" max="5" />
+                <span asp-validation-for="Rating" class="text-sm text-rose-500"></span>
+            </div>
+
+            <div class="form-field">
+                <label asp-for="Comment" class="form-label">Comment</label>
+                <textarea asp-for="Comment" class="input-textarea" placeholder="Optional notes about your experience"></textarea>
+                <span asp-validation-for="Comment" class="text-sm text-rose-500"></span>
+            </div>
+
+            <button type="submit" class="btn-primary px-5 py-2.5">Submit feedback</button>
+        </form>
     </div>
+</section>
 
-    <button type="submit" class="btn btn-primary">Submit Feedback</button>
-</form>
-
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

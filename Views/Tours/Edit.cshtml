@@ -1,63 +1,144 @@
 @model TourismApp.Models.ViewModels.TourPackageEditVM
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-  ViewData["Title"] = "Edit Package";
+    ViewData["Title"] = "Edit Package";
 }
-<h2>Edit Package</h2>
 
-<form asp-action="Edit" method="post">
-  @Html.AntiForgeryToken()
-  <input type="hidden" asp-for="Id" />
-  <input type="hidden" asp-for="AgencyProfileId" />
-  <div asp-validation-summary="All" class="text-danger"></div>
+<section class="space-y-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="heading">Edit tour package</h1>
+            <p class="section-subtitle">Refine details to keep your listing aligned with traveller expectations.</p>
+        </div>
+        <a asp-action="MyPackages" class="btn-outline inline-flex items-center gap-2 px-5 py-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to packages
+        </a>
+    </div>
 
-  <div class="mb-3"><label asp-for="Title" class="form-label"></label><input asp-for="Title" class="form-control"/><span asp-validation-for="Title" class="text-danger"></span></div>
-  <div class="mb-3"><label asp-for="Description" class="form-label"></label><textarea asp-for="Description" class="form-control"></textarea><span asp-validation-for="Description" class="text-danger"></span></div>
-  <div class="mb-3"><label asp-for="DurationDays" class="form-label"></label><input asp-for="DurationDays" class="form-control" type="number"/><span asp-validation-for="DurationDays" class="text-danger"></span></div>
-  <div class="mb-3"><label asp-for="Price" class="form-label"></label><input asp-for="Price" class="form-control" type="number" step="0.01"/><span asp-validation-for="Price" class="text-danger"></span></div>
-  <div class="mb-3"><label asp-for="GroupSizeLimit" class="form-label"></label><input asp-for="GroupSizeLimit" class="form-control" type="number"/><span asp-validation-for="GroupSizeLimit" class="text-danger"></span></div>
-  <div class="mb-3"><label asp-for="ImagePath" class="form-label"></label><input asp-for="ImagePath" class="form-control"/></div>
+    <div class="card p-8">
+        <form asp-action="Edit" method="post" class="space-y-10">
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="AgencyProfileId" />
 
-  <h4 class="mt-4">Existing Dates</h4>
-  @if (!Model.ExistingDates.Any())
-  {
-    <div class="alert alert-info">No dates yet.</div>
-  }
-  else
-  {
-    <table class="table table-sm align-middle">
-      <thead><tr><th>Date</th><th>Capacity</th><th>Remove</th></tr></thead>
-      <tbody>
-      @for (int i = 0; i < Model.ExistingDates.Count; i++)
-      {
-        <tr>
-          <td>
-            <input type="hidden" asp-for="ExistingDates[@i].Id" />
-            <input asp-for="ExistingDates[@i].Date" class="form-control" type="date" />
-          </td>
-          <td><input asp-for="ExistingDates[@i].Capacity" class="form-control" type="number" /></td>
-          <td class="text-center"><input asp-for="ExistingDates[@i].Remove" class="form-check-input" type="checkbox" /></td>
-        </tr>
-      }
-      </tbody>
-    </table>
-  }
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+            {
+                <div asp-validation-summary="All" class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600" role="alert"></div>
+            }
 
-  <h4 class="mt-4">Add New Dates</h4>
-  <table class="table table-sm">
-    <thead><tr><th>Date</th><th>Capacity</th></tr></thead>
-    <tbody>
-    @for (int i = 0; i < Model.NewDates.Count; i++)
-    {
-      <tr>
-        <td><input asp-for="NewDates[@i].Date" class="form-control" type="date" /></td>
-        <td><input asp-for="NewDates[@i].Capacity" class="form-control" type="number" /></td>
-      </tr>
-    }
-    </tbody>
-  </table>
+            <div class="grid gap-6 md:grid-cols-2">
+                <div class="form-field">
+                    <label asp-for="Title" class="form-label">Title</label>
+                    <input asp-for="Title" class="input" />
+                    <span asp-validation-for="Title" class="text-sm text-rose-500"></span>
+                </div>
+                <div class="form-field">
+                    <label asp-for="GroupSizeLimit" class="form-label">Group size</label>
+                    <input asp-for="GroupSizeLimit" class="input" type="number" />
+                    <span asp-validation-for="GroupSizeLimit" class="text-sm text-rose-500"></span>
+                </div>
+                <div class="form-field md:col-span-2">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="input-textarea"></textarea>
+                    <span asp-validation-for="Description" class="text-sm text-rose-500"></span>
+                </div>
+                <div class="form-field">
+                    <label asp-for="DurationDays" class="form-label">Duration (days)</label>
+                    <input asp-for="DurationDays" class="input" type="number" />
+                    <span asp-validation-for="DurationDays" class="text-sm text-rose-500"></span>
+                </div>
+                <div class="form-field">
+                    <label asp-for="Price" class="form-label">Price</label>
+                    <input asp-for="Price" class="input" type="number" step="0.01" />
+                    <span asp-validation-for="Price" class="text-sm text-rose-500"></span>
+                </div>
+                <div class="form-field md:col-span-2">
+                    <label asp-for="ImagePath" class="form-label">Image path</label>
+                    <input asp-for="ImagePath" class="input" />
+                </div>
+            </div>
 
-  <button class="btn btn-primary">Save</button>
-</form>
+            <div class="space-y-4">
+                <h2 class="section-title text-xl">Existing dates</h2>
+                @if (!(Model.ExistingDates?.Any() ?? false))
+                {
+                    <div class="empty-state border-slate-200 bg-slate-50">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10m-12 8h14a2 2 0 002-2V7a2 2 0 00-2-2h-3m-8 0H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                        <p class="text-sm text-slate-500">No dates yet. Add availability below.</p>
+                    </div>
+                }
+                else
+                {
+                    <div class="table-shell">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Capacity</th>
+                                    <th class="text-center">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                            @for (int i = 0; i < Model.ExistingDates.Count; i++)
+                            {
+                                <tr>
+                                    <td class="px-4 py-3">
+                                        <input type="hidden" asp-for="ExistingDates[@i].Id" />
+                                        <input asp-for="ExistingDates[@i].Date" class="input" type="date" />
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        <input asp-for="ExistingDates[@i].Capacity" class="input" type="number" />
+                                    </td>
+                                    <td class="px-4 py-3 text-center">
+                                        <input asp-for="ExistingDates[@i].Remove" class="h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary/30" type="checkbox" />
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
 
-@section Scripts { <partial name="_ValidationScriptsPartial" /> }
+            <div class="space-y-4">
+                <h2 class="section-title text-xl">Add new dates</h2>
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Capacity</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                        @for (int i = 0; i < Model.NewDates.Count; i++)
+                        {
+                            <tr>
+                                <td class="px-4 py-3">
+                                    <input asp-for="NewDates[@i].Date" class="input" type="date" />
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input asp-for="NewDates[@i].Capacity" class="input" type="number" />
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex justify-end">
+                <button class="btn-primary px-6 py-2.5">Save changes</button>
+            </div>
+        </form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

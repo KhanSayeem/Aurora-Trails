@@ -147,23 +147,6 @@ namespace TourismApp.Controllers
 
             return View(items);
         }
-
-        // Test action to debug booking issues
-        [Authorize(Roles = "Tourist")]
-        public async Task<IActionResult> Test()
-        {
-            var uid = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-            var items = await _ctx.Bookings
-                .Where(b => b.UserId == uid)
-                .Include(b => b.TourDate)
-                    .ThenInclude(td => td.TourPackage)
-                .OrderByDescending(b => b.CreatedAt)
-                .ToListAsync();
-
-            return View(items);
-        }
-
         // Tourist: create a booking from the Details page
 [HttpPost, Authorize(Roles = "Tourist")]
 [ValidateAntiForgeryToken]
@@ -209,7 +192,7 @@ public async Task<IActionResult> Create(int tourDateId, int participants)
     await _ctx.SaveChangesAsync();
 
     TempData["Msg"] = "Booking created successfully!";
-    return RedirectToAction("Test", "Bookings");
+    return RedirectToAction(nameof(Index));
 }
 
 
@@ -251,3 +234,8 @@ public async Task<IActionResult> Create(int tourDateId, int participants)
         }
     }
 }
+
+
+
+
+

@@ -1,122 +1,223 @@
-﻿@model IEnumerable<TourismApp.Models.TourPackage>
+@model IEnumerable<TourismApp.Models.TourPackage>
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
+    var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+    var teamMembers = new (string Name, string Id)[]
+    {
+        ("RATUL KUMAR BHOWAL", "20030274"),
+        ("PIASH SHANTO SAHA", "20030260"),
+        ("MD Fatinur Rahman", "20030129"),
+        ("MD Fatinur Rahman", "20030129")
+    };
 }
 
 @section Hero {
-<div class="hero-section">
-    <div class="container py-5">
-        <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">Discover Your Next Adventure</h1>
-                <p class="lead mb-4">Explore handpicked tour packages from trusted travel agencies around the world. Find your perfect getaway today.</p>
-                <div class="d-flex gap-3">
-                    <a href="@Url.Action("Index", "Tours")" class="btn btn-light btn-lg">
-                        <i class="fas fa-search me-2"></i>Browse Tours
+    <div class="container relative grid gap-12 py-16 lg:grid-cols-[1.2fr,1fr]">
+        <div class="flex flex-col gap-8">
+            <div class="flex flex-col gap-4">
+                <span class="inline-flex items-center gap-2 self-start rounded-full border border-primary/30 bg-primary/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.25em] text-primary">
+                    Seamless Journeys
+                </span>
+                <h1 class="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">
+                    Curated tours, crafted experiences, and calmer travel operations.
+                </h1>
+                <p class="max-w-xl text-base text-slate-500">
+                    Aurora Trails connects discerning travellers with trusted agencies through a modern, minimal interface. Discover thoughtfully designed itineraries and manage bookings without friction.
+                </p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <a class="btn-primary px-6 py-3 text-sm font-semibold" asp-controller="Tours" asp-action="Index">
+                    Explore tours
+                </a>
+                @if (!isAuthenticated)
+                {
+                    <a class="btn-outline px-6 py-3 text-sm font-semibold" asp-area="Identity" asp-page="/Account/Register">
+                        Create account
                     </a>
-                    @if (!User.Identity.IsAuthenticated)
-                    {
-                        <a href="@Url.Page("/Account/Register")" class="btn btn-outline-light btn-lg">
-                            <i class="fas fa-user-plus me-2"></i>Join Now
-                        </a>
-                    }
-                </div>
+                }
+                <a class="inline-flex items-center gap-2 text-sm font-medium text-slate-500 transition hover:text-primary" asp-controller="Feedbacks" asp-action="Index">
+                    View traveller feedback
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0-4 4m4-4H3" />
+                    </svg>
+                </a>
             </div>
-            <div class="col-lg-6 d-none d-lg-block">
-                <div class="rounded-circle bg-white bg-opacity-25 p-5 mx-auto" style="width: 300px; height: 300px;">
-                    <i class="fas fa-globe-americas fa-7x text-white"></i>
+            <div class="grid grid-cols-2 gap-6 text-sm text-slate-500 sm:grid-cols-4">
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Agencies</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">30+</p>
+                    <p>Trusted partners worldwide.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Tours</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">180+</p>
+                    <p>Curated itineraries.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Reviews</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">4.8/5</p>
+                    <p>Average traveller rating.</p>
+                </div>
+                <div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+                    <p class="text-xs uppercase tracking-wide text-slate-400">Support</p>
+                    <p class="mt-2 text-lg font-semibold text-slate-900">24/7</p>
+                    <p>Agency assistance.</p>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-}
-
-<div class="container">
-    <div class="row mb-5">
-        <div class="col-md-4 mb-4">
-            <div class="card feature-card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 d-inline-block mb-3">
-                        <i class="fas fa-search fa-2x text-primary"></i>
+        <div class="relative">
+            <div class="absolute inset-0 -z-10 rounded-[2.5rem] bg-gradient-to-br from-primary/20 via-slate-100 to-white blur-3xl"></div>
+            <div class="grid gap-4 rounded-[2.5rem] border border-slate-200 bg-white/80 p-6 shadow-card backdrop-blur">
+                <div class="flex items-center justify-between text-sm text-slate-500">
+                    <span>Featured Escape</span>
+                    <span class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+                        Handpicked
+                    </span>
+                </div>
+                <div class="space-y-3 rounded-2xl bg-slate-50 p-4">
+                    <h3 class="text-lg font-semibold text-slate-900">Nordic Aurora Retreat</h3>
+                    <p class="text-sm text-slate-500">
+                        5 nights exploring the Arctic circle with private guides, boutique accommodations, and curated dining experiences.
+                    </p>
+                    <div class="flex items-center justify-between text-sm text-slate-600">
+                        <span>Starting at</span>
+                        <span class="text-lg font-semibold text-slate-900">$2,450</span>
                     </div>
-                    <h5 class="card-title">Find Your Perfect Tour</h5>
-                    <p class="card-text">Browse hundreds of tour packages tailored to your interests and budget.</p>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card feature-card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="rounded-circle bg-success bg-opacity-10 p-3 d-inline-block mb-3">
-                        <i class="fas fa-check-circle fa-2x text-success"></i>
-                    </div>
-                    <h5 class="card-title">Trusted Agencies</h5>
-                    <p class="card-text">Book with confidence through our verified and reviewed travel agencies.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4 mb-4">
-            <div class="card feature-card h-100 border-0 shadow-sm">
-                <div class="card-body text-center p-4">
-                    <div class="rounded-circle bg-info bg-opacity-10 p-3 d-inline-block mb-3">
-                        <i class="fas fa-heart fa-2x text-info"></i>
-                    </div>
-                    <h5 class="card-title">Memorable Experiences</h5>
-                    <p class="card-text">Create unforgettable memories with our carefully curated experiences.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <h2 class="mb-0">Popular & Recent Tours</h2>
-                <a href="@Url.Action("Index", "Tours")" class="btn btn-outline-primary">View All Tours</a>
-            </div>
-            <hr>
-        </div>
-    </div>
-
-    @if (Model == null || !Model.Any())
-    {
-        <div class="alert alert-info d-flex align-items-center" role="alert">
-            <i class="fas fa-info-circle fa-lg me-2"></i>
-            <div>No tours available yet. Check back soon for exciting travel opportunities!</div>
-        </div>
-    }
-    else
-    {
-        <div class="row g-4">
-            @foreach (var t in Model.Take(6))
-            {
-                <div class="col-md-4">
-                    <div class="card h-100 shadow-sm">
-                        <img src="@(string.IsNullOrWhiteSpace(t.ImagePath) 
-                            ? Url.Content("~/images/placeholder.jpg") 
-                            : Url.Content(t.ImagePath))"
-                            asp-append-version="true"
-                            class="card-img-top" style="height: 200px; object-fit: cover;"
-                            alt="@t.Title" />
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@t.Title</h5>
-                            <p class="card-text flex-grow-1">
-                                @(t.Description.Length > 100 ? t.Description.Substring(0, 100) + "..." : t.Description)
-                            </p>
-                            <div class="mt-auto">
-                                <div class="d-flex justify-content-between align-items-center mb-3">
-                                    <span class="h5 text-primary mb-0">$@t.Price</span>
-                                    <span class="badge bg-secondary">@t.DurationDays @(t.DurationDays == 1 ? "day" : "days")</span>
-                                </div>
-                                <a asp-controller="Tours" asp-action="Details" asp-route-id="@t.Id" class="btn btn-primary w-100">
-                                    <i class="fas fa-info-circle me-1"></i>View Details
-                                </a>
-                            </div>
+                <div class="space-y-3 rounded-2xl bg-slate-900 p-5 text-slate-50">
+                    <p class="text-sm font-semibold uppercase tracking-[0.3em] text-slate-300">Why travellers stay</p>
+                    <p class="text-lg leading-relaxed">“The attention to detail is outstanding. Smooth booking, thoughtful curation, and responsive agency support throughout our trip.”</p>
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-9 w-9 place-items-center rounded-xl bg-white/10 text-sm font-semibold">M</span>
+                        <div>
+                            <p class="text-sm font-semibold">Mara Jensen</p>
+                            <p class="text-xs text-slate-400">Visited Iceland | Feb 2025</p>
                         </div>
                     </div>
                 </div>
-            }
+            </div>
         </div>
-    }
-</div>
+    </div>
+}
+
+<section class="space-y-12">
+    <div class="grid gap-8 lg:grid-cols-3">
+        <div class="card p-8">
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 4h10m0 0v10m0-10-12 12" />
+                </svg>
+            </div>
+            <h2 class="mt-6 text-xl font-semibold text-slate-900">Tailored discoveries</h2>
+            <p class="mt-3 text-sm text-slate-500">Filter by interest, season, or mood. Build itineraries that mirror your travel personality.</p>
+        </div>
+        <div class="card p-8">
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h2 class="mt-6 text-xl font-semibold text-slate-900">Verified agencies</h2>
+            <p class="mt-3 text-sm text-slate-500">Every operator is vetted for service quality, responsiveness, and safety standards.</p>
+        </div>
+        <div class="card p-8">
+            <div class="flex h-12 w-12 items-center justify-center rounded-xl bg-sky-500/10 text-sky-600">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+            </div>
+            <h2 class="mt-6 text-xl font-semibold text-slate-900">Transparent insights</h2>
+            <p class="mt-3 text-sm text-slate-500">Know what to expect with real guest feedback, sample schedules, and amenity breakdowns.</p>
+        </div>
+    </div>
+
+    <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+            <div>
+                <h2 class="section-title">Popular & recent tours</h2>
+                <p class="section-subtitle">Selected itineraries updated in real-time from partner agencies.</p>
+            </div>
+            <a class="btn-outline px-4 py-2" asp-controller="Tours" asp-action="Index">View all tours</a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9m18 0c0-4.97-4.03-9-9-9s-9 4.03-9 9" />
+                </svg>
+                <div>
+                    <p class="text-base font-semibold text-slate-700">We are lining up new adventures.</p>
+                    <p class="text-sm text-slate-500">Check back shortly for freshly curated packages from our newest partner agencies.</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+                @foreach (var tour in Model.Take(6))
+                {
+                    <article class="card overflow-hidden">
+                        <div class="relative">
+                            <img src="@(string.IsNullOrWhiteSpace(tour.ImagePath) ? Url.Content("~/images/placeholder.jpg") : Url.Content(tour.ImagePath))" asp-append-version="true" alt="@tour.Title" class="h-52 w-full object-cover" />
+                            <div class="absolute inset-x-0 bottom-0 flex items-center justify-between bg-gradient-to-t from-slate-900/80 to-transparent px-5 pb-4 pt-16 text-sm text-slate-100">
+                                <span class="font-semibold">@tour.AgencyProfile?.AgencyName</span>
+                                <span class="inline-flex items-center gap-1 rounded-full bg-white/15 px-3 py-1 text-xs font-medium">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 8c-.912 0-1.667.672-1.667 1.5S11.088 11 12 11s1.667-.672 1.667-1.5S12.912 8 12 8z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M5.143 15.5C6.507 13.607 9.05 12.5 12 12.5s5.493 1.107 6.857 3" />
+                                    </svg>
+                                    @tour.GroupSizeLimit people
+                                </span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 p-6">
+                            <div class="flex items-start justify-between gap-3">
+                                <h3 class="text-lg font-semibold text-slate-900">@tour.Title</h3>
+                                <span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">@tour.DurationDays @(tour.DurationDays == 1 ? "day" : "days")</span>
+                            </div>
+                            <p class="line-clamp-3 text-sm text-slate-500">
+                                @(tour.Description.Length > 120 ? tour.Description.Substring(0, 120) + "…" : tour.Description)
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div class="text-sm text-slate-500">
+                                    Starting from
+                                    <span class="ml-1 text-lg font-semibold text-slate-900">$@tour.Price</span>
+                                </div>
+                                <a asp-controller="Tours" asp-action="Details" asp-route-id="@tour.Id" class="btn-primary px-4 py-2 text-sm font-semibold">
+                                    View details
+                                </a>
+                            </div>
+                        </div>
+                    </article>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+@if (User.IsInRole("Tourist"))
+{
+    <section class="mt-16">
+        <div class="card overflow-hidden bg-slate-900 text-slate-50">
+            <div class="grid gap-8 p-8 lg:grid-cols-[1fr,1.2fr] lg:items-center">
+                <div class="space-y-4">
+                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Project team</p>
+                    <h2 class="text-2xl font-semibold">Student collaborators behind Aurora Trails</h2>
+                    <p class="text-sm text-slate-300">This platform is crafted with care by our development cohort. Meet the student team and their identifiers below.</p>
+                </div>
+                <div class="grid gap-3 sm:grid-cols-2">
+                    @foreach (var member in teamMembers)
+                    {
+                        <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                            <p class="text-sm font-semibold">@member.Name</p>
+                            <p class="text-xs uppercase tracking-wide text-slate-300">@member.Id</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </section>
+}
+

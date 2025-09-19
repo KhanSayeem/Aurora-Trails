@@ -5,122 +5,74 @@
     ViewData["Title"] = "My Profile";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2><i class="fas fa-user-circle me-2"></i>My Profile</h2>
-    <small class="text-muted">Keep your information up to date</small>
-</div>
-
-@if (TempData["Msg"] is string ok) 
-{ 
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-        <i class="fas fa-check-circle me-2"></i>@ok
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div> 
-}
-
-<div class="row">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">
-                    <i class="fas fa-edit me-2"></i>Profile Information
-                </h5>
-            </div>
-            <div class="card-body">
-                <form asp-action="Tourist" method="post">
-                    @Html.AntiForgeryToken()
-                    
-                    <div class="mb-3">
-                        <label asp-for="FullName" class="form-label">
-                            <i class="fas fa-user me-2"></i>Full Name *
-                        </label>
-                        <input asp-for="FullName" class="form-control" placeholder="Enter your full name" required>
-                        <span asp-validation-for="FullName" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Country" class="form-label">
-                            <i class="fas fa-globe me-2"></i>Country
-                        </label>
-                        <input asp-for="Country" class="form-control" placeholder="Enter your country">
-                        <span asp-validation-for="Country" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">
-                            <i class="fas fa-envelope me-2"></i>Email
-                        </label>
-                        <input type="email" class="form-control" value="@User.Identity.Name" disabled>
-                        <div class="form-text">Email cannot be changed here. Contact support if needed.</div>
-                    </div>
-
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save me-2"></i>Save Profile
-                        </button>
-                    </div>
-                </form>
-            </div>
+<section class="space-y-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="heading">Tourist profile</h1>
+            <p class="section-subtitle">Keep your information precise to receive relevant agency updates.</p>
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card-header">
-                <h6 class="card-title mb-0">
-                    <i class="fas fa-info-circle me-2"></i>Account Info
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <strong>Account Type:</strong>
-                    <span class="badge bg-success ms-2">
-                        <i class="fas fa-user me-1"></i>Tourist
-                    </span>
+    @if (TempData["Msg"] is string ok)
+    {
+        <div class="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700 shadow-sm">@ok</div>
+    }
+
+    <div class="grid gap-6 lg:grid-cols-[1.4fr,1fr]">
+        <div class="card p-6">
+            <h2 class="section-title text-xl">Profile information</h2>
+            <p class="section-subtitle">Only agencies you book with can view this data.</p>
+            <form asp-action="Tourist" method="post" class="mt-6 space-y-5">
+                @Html.AntiForgeryToken()
+                <div class="form-field">
+                    <label asp-for="FullName" class="form-label">Full name</label>
+                    <input asp-for="FullName" class="input" placeholder="Enter your full name" required />
+                    <span asp-validation-for="FullName" class="text-sm text-rose-500"></span>
                 </div>
-                <div class="mb-3">
-                    <strong>Email:</strong>
-                    <div class="text-muted">@User.Identity.Name</div>
+                <div class="form-field">
+                    <label asp-for="Country" class="form-label">Country</label>
+                    <input asp-for="Country" class="input" placeholder="Enter your country" />
+                    <span asp-validation-for="Country" class="text-sm text-rose-500"></span>
                 </div>
-                <div class="mb-3">
-                    <strong>Member Since:</strong>
-                    <div class="text-muted">Recently joined</div>
+                <div class="form-field">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="input" value="@User.Identity?.Name" disabled />
+                    <p class="text-xs text-slate-400">Email changes require contacting support.</p>
                 </div>
-            </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="btn-primary px-6 py-2.5">Save profile</button>
+                </div>
+            </form>
         </div>
 
-        <div class="card mt-3">
-            <div class="card-header">
-                <h6 class="card-title mb-0">
-                    <i class="fas fa-chart-bar me-2"></i>Quick Stats
-                </h6>
-            </div>
-            <div class="card-body">
-                <div class="row text-center">
-                    <div class="col-6">
-                        <div class="border-end">
-                            <h5 class="text-primary mb-0">
-                                <i class="fas fa-calendar-check"></i>
-                            </h5>
-                            <small class="text-muted">My Bookings</small>
-                        </div>
+        <div class="space-y-6">
+            <div class="card p-6">
+                <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Account overview</h3>
+                <div class="mt-4 space-y-4 text-sm text-slate-600">
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-500">Account type</span>
+                        <span class="badge badge-info">Tourist</span>
                     </div>
-                    <div class="col-6">
-                        <h5 class="text-warning mb-0">
-                            <i class="fas fa-star"></i>
-                        </h5>
-                        <small class="text-muted">My Reviews</small>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-500">Email</span>
+                        <span class="font-medium text-slate-900">@User.Identity?.Name</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <span class="text-slate-500">Member since</span>
+                        <span class="font-medium text-slate-900">Recent</span>
                     </div>
                 </div>
-                <div class="d-grid mt-3">
-                    <a asp-controller="Bookings" asp-action="Index" class="btn btn-outline-primary btn-sm">
-                        <i class="fas fa-list me-2"></i>View Activity
-                    </a>
+            </div>
+            <div class="card p-6">
+                <h3 class="text-sm font-semibold uppercase tracking-wide text-slate-500">Quick links</h3>
+                <div class="mt-4 grid gap-3 text-sm">
+                    <a asp-controller="Bookings" asp-action="Index" class="btn-outline px-4 py-2 text-left">View bookings</a>
+                    <a asp-controller="Feedbacks" asp-action="Index" class="btn-outline px-4 py-2 text-left">My feedback</a>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

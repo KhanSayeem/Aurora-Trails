@@ -3,199 +3,165 @@
     ViewData["Title"] = "Agency Dashboard";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0"><i class="fas fa-building me-2 text-primary"></i>Agency Dashboard</h2>
-    <div>
-        <a asp-controller="Tours" asp-action="MyPackages" class="btn btn-primary">
-            <i class="fas fa-map-signs me-1"></i>Manage Tours
-        </a>
+<section class="space-y-10">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div class="space-y-2">
+            <div class="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-primary">Agency</div>
+            <h1 class="heading">Welcome back, @Model.AgencyName</h1>
+            <p class="section-subtitle">Monitor bookings, revenue, and guest sentiment in one calm workspace.</p>
+        </div>
+        <div class="flex flex-wrap gap-3">
+            <a class="btn-primary px-5 py-2.5" asp-controller="Tours" asp-action="Create">
+                Create new tour
+            </a>
+            <a class="btn-outline px-5 py-2.5" asp-controller="Tours" asp-action="MyPackages">
+                Manage existing tours
+            </a>
+        </div>
     </div>
-</div>
 
-<!-- Stats Cards -->
-<div class="row mb-4">
-    <div class="col-md-3 mb-3">
-        <div class="card border-left-primary shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Tours</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalTours</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-map-signs fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
+    <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div class="card border border-transparent bg-white p-6 shadow-subtle">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total tours</p>
+            <p class="mt-4 text-3xl font-semibold text-slate-900">@Model.TotalTours</p>
+            <p class="mt-2 text-sm text-slate-500">Packages showcasing your agency portfolio.</p>
+        </div>
+        <div class="card border border-transparent bg-white p-6 shadow-subtle">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Active bookings</p>
+            <p class="mt-4 text-3xl font-semibold text-slate-900">@Model.ActiveBookings</p>
+            <p class="mt-2 text-sm text-slate-500">Guests currently in your care.</p>
+        </div>
+        <div class="card border border-transparent bg-white p-6 shadow-subtle">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Total revenue</p>
+            <p class="mt-4 text-3xl font-semibold text-slate-900">$@Model.TotalRevenue.ToString("N0")</p>
+            <p class="mt-2 text-sm text-slate-500">Confirmed earnings from bookings.</p>
+        </div>
+        <div class="card border border-transparent bg-white p-6 shadow-subtle">
+            <p class="text-xs font-semibold uppercase tracking-wide text-slate-400">Pending reviews</p>
+            <p class="mt-4 text-3xl font-semibold text-slate-900">@Model.PendingReviews</p>
+            <p class="mt-2 text-sm text-slate-500">Awaiting responses from your team.</p>
         </div>
     </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card border-left-success shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Bookings</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.ActiveBookings</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card border-left-info shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Total Revenue</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">$@Model.TotalRevenue.ToString("N0")</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="col-md-3 mb-3">
-        <div class="card border-left-warning shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col mr-2">
-                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Reviews</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.PendingReviews</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fas fa-star-half-alt fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<!-- Recent Bookings -->
-<div class="row mb-4">
-    <div class="col-12">
-        <div class="card shadow">
-            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                <h6 class="m-0 font-weight-bold text-primary">Recent Bookings</h6>
-                <a asp-controller="Bookings" asp-action="Manage" class="btn btn-sm btn-primary">View All</a>
-            </div>
-            <div class="card-body">
-                @if (!Model.RecentBookings.Any())
-                {
-                    <div class="text-center py-5">
-                        <i class="fas fa-calendar-times fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">No bookings yet</h4>
-                        <p class="text-muted">Create tour packages to start receiving bookings</p>
-                    </div>
-                }
-                else
-                {
-                    <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Tour Package</th>
-                                    <th>Booking Date</th>
-                                    <th>Participants</th>
-                                    <th>Status</th>
-                                    <th>Revenue</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var booking in Model.RecentBookings)
-                                {
-                                    <tr>
-                                        <td>@booking.PackageTitle</td>
-                                        <td>@booking.BookingDate.ToString("MMM dd, yyyy")</td>
-                                        <td>@booking.Participants</td>
-                                        <td>
-                                            @{
-                                                var statusClass = booking.Status switch
-                                                {
-                                                    "Pending" => "badge-warning",
-                                                    "Confirmed" => "badge-info",
-                                                    "Completed" => "badge-success",
-                                                    "Cancelled" => "badge-secondary",
-                                                    _ => "badge-light"
-                                                };
-                                            }
-                                            <span class="badge @statusClass">@booking.Status</span>
-                                        </td>
-                                        <td>$@booking.Revenue.ToString("N0")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Quick Actions -->
-<div class="row">
-    <div class="col-lg-6 mb-4">
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Quick Actions</h6>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <a asp-controller="Tours" asp-action="Create" class="btn btn-primary btn-block">
-                            <i class="fas fa-plus-circle me-1"></i>Create Tour
-                        </a>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <a asp-controller="Tours" asp-action="MyPackages" class="btn btn-secondary btn-block">
-                            <i class="fas fa-edit me-1"></i>Edit Tours
-                        </a>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <a asp-controller="Bookings" asp-action="Manage" class="btn btn-info btn-block">
-                            <i class="fas fa-tasks me-1"></i>Manage Bookings
-                        </a>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <a asp-controller="Reports" asp-action="Index" class="btn btn-success btn-block">
-                            <i class="fas fa-chart-bar me-1"></i>View Reports
-                        </a>
-                    </div>
+    <div class="grid gap-8 xl:grid-cols-[2fr,1fr]">
+        <div class="space-y-6">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h2 class="section-title">Recent bookings</h2>
+                    <p class="section-subtitle">Latest activity aggregated across your tours.</p>
                 </div>
+                <a class="btn-outline px-4 py-2" asp-controller="Bookings" asp-action="Manage">View all</a>
             </div>
-        </div>
-    </div>
-    
-    <div class="col-lg-6 mb-4">
-        <div class="card shadow">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Agency Profile</h6>
-            </div>
-            <div class="card-body">
-                <div class="d-flex align-items-center mb-3">
-                    <div class="rounded-circle bg-primary bg-opacity-10 p-3 me-3">
-                        <i class="fas fa-building fa-2x text-primary"></i>
-                    </div>
+
+            @if (!Model.RecentBookings.Any())
+            {
+                <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4m0 6l-4 4-4-4" />
+                    </svg>
                     <div>
-                        <h5 class="mb-0">@Model.AgencyName</h5>
-                        <p class="text-muted mb-0">@Model.AgencyDescription</p>
+                        <p class="text-base font-semibold text-slate-700">Your dashboard is warming up.</p>
+                        <p class="text-sm text-slate-500">Create a new tour to start receiving bookings.</p>
                     </div>
                 </div>
-                <div class="mt-3">
-                    <a asp-controller="Profile" asp-action="Agency" class="btn btn-outline-primary">
-                        <i class="fas fa-cog me-1"></i>Update Profile
+            }
+            else
+            {
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tour package</th>
+                                <th>Booking date</th>
+                                <th>Guests</th>
+                                <th>Status</th>
+                                <th>Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100">
+                            @foreach (var booking in Model.RecentBookings)
+                            {
+                                var statusClass = booking.Status switch
+                                {
+                                    "Pending" => "badge badge-warning",
+                                    "Confirmed" => "badge badge-info",
+                                    "Completed" => "badge badge-success",
+                                    "Cancelled" => "badge badge-danger",
+                                    _ => "badge"
+                                };
+                                <tr>
+                                    <td class="font-semibold text-slate-900">@booking.PackageTitle</td>
+                                    <td>@booking.BookingDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@booking.Participants</td>
+                                    <td><span class="@statusClass">@booking.Status</span></td>
+                                    <td class="font-medium text-slate-900">$@booking.Revenue.ToString("N0")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+
+        <div class="space-y-6">
+            <div class="card p-6">
+                <h2 class="section-title text-lg">Quick actions</h2>
+                <p class="section-subtitle">Frequently performed agency tasks.</p>
+                <div class="mt-6 grid gap-3">
+                    <a class="btn-secondary justify-between px-4 py-2" asp-controller="Tours" asp-action="Create">
+                        Create tour
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                    </a>
+                    <a class="btn-outline justify-between px-4 py-2" asp-controller="Tours" asp-action="MyPackages">
+                        Edit tours
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L7.5 20.5 3 21.5l1-4.5L16.732 3.732z" />
+                        </svg>
+                    </a>
+                    <a class="btn-outline justify-between px-4 py-2" asp-controller="Bookings" asp-action="Manage">
+                        Manage bookings
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10m-12 8h14a2 2 0 002-2V7a2 2 0 00-2-2h-3m-8 0H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </a>
+                    <a class="btn-outline justify-between px-4 py-2" asp-controller="Feedbacks" asp-action="Agency">
+                        Customer feedback
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M7 8h10M7 12h6m-6 4h8m5 0V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14l4-4h10a2 2 0 002-2z" />
+                        </svg>
+                    </a>
+                    <a class="btn-outline justify-between px-4 py-2" asp-controller="Reports" asp-action="Index">
+                        View reports
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h2l1 9h12l1-9h2M10 10v9m4-9v9m1-13V5a3 3 0 10-6 0v1" />
+                        </svg>
                     </a>
                 </div>
             </div>
+
+            <div class="card p-6">
+                <h2 class="section-title text-lg">Agency profile</h2>
+                <p class="section-subtitle">Keep your details sharp for potential guests.</p>
+                <div class="mt-6 flex items-center gap-4">
+                    <div class="grid h-12 w-12 place-items-center rounded-xl bg-primary/10 text-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 21v-6a4 4 0 014-4h8a4 4 0 014 4v6M16 7a4 4 0 10-8 0 4 4 0 008 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p class="text-base font-semibold text-slate-900">@Model.AgencyName</p>
+                        <p class="text-sm text-slate-500">@Model.AgencyDescription</p>
+                    </div>
+                </div>
+                <a class="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-primary transition hover:text-primary/80" asp-controller="Profile" asp-action="Agency">
+                    Update profile
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0-4 4m4-4H3" />
+                    </svg>
+                </a>
+            </div>
         </div>
     </div>
-</div>
+</section>

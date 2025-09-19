@@ -1,0 +1,12 @@
+# Build output
+bin/
+obj/
+
+# Node packages
+node_modules/
+
+# Local database
+app.db
+
+# Misc
+*.gz

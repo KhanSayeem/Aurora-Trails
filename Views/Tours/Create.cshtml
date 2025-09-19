@@ -1,145 +1,188 @@
 @model TourismApp.Models.ViewModels.TourPackageCreateVM
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-  ViewData["Title"] = "Create Package";
+    ViewData["Title"] = "Create Package";
 }
 
-<div class="d-flex justify-content-between align-items-center mb-4">
-    <h2>Create New Tour Package</h2>
-    <a asp-action="MyPackages" class="btn btn-outline-secondary">
-        <i class="fas fa-arrow-left me-1"></i>Back to My Packages
-    </a>
-</div>
+<section class="space-y-8">
+    <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+            <h1 class="heading">Create tour package</h1>
+            <p class="section-subtitle">Craft a minimal, confident listing for your travellers.</p>
+        </div>
+        <a asp-action="MyPackages" class="btn-outline inline-flex items-center gap-2 px-5 py-2.5">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Back to packages
+        </a>
+    </div>
 
-<div class="card shadow-sm">
-    <div class="card-body">
-        <form asp-action="Create" method="post">
+    <div class="card p-8">
+        <form asp-action="Create" method="post" class="space-y-10">
             @Html.AntiForgeryToken()
-            <div asp-validation-summary="All" class="text-danger"></div>
+            @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ErrorCount > 0)
+            {
+                <div asp-validation-summary="All" class="rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-600" role="alert"></div>
+            }
 
-            <div class="row">
-                <div class="col-md-8">
-                    <div class="mb-3">
-                        <label asp-for="Title" class="form-label"></label>
-                        <input asp-for="Title" class="form-control form-control-lg" placeholder="Enter tour title"/>
-                        <span asp-validation-for="Title" class="text-danger"></span>
+            <div class="grid gap-8 lg:grid-cols-[1.6fr,1fr]">
+                <div class="space-y-6">
+                    <div class="form-field">
+                        <label asp-for="Title" class="form-label">Tour title</label>
+                        <input asp-for="Title" class="input text-base" placeholder="Enter tour title" />
+                        <span asp-validation-for="Title" class="text-sm text-rose-500"></span>
                     </div>
-                    
-                    <div class="mb-3">
-                        <label asp-for="Description" class="form-label"></label>
-                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Describe your tour package in detail"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
+                    <div class="form-field">
+                        <label asp-for="Description" class="form-label">Description</label>
+                        <textarea asp-for="Description" class="input-textarea" placeholder="Describe your tour package in detail"></textarea>
+                        <span asp-validation-for="Description" class="text-sm text-rose-500"></span>
                     </div>
-                    
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label asp-for="DurationDays" class="form-label"></label>
-                            <input asp-for="DurationDays" class="form-control" type="number" min="1"/>
-                            <span asp-validation-for="DurationDays" class="text-danger"></span>
+                    <div class="grid gap-4 sm:grid-cols-3">
+                        <div class="form-field">
+                            <label asp-for="DurationDays" class="form-label">Duration (days)</label>
+                            <input asp-for="DurationDays" class="input" type="number" min="1" />
+                            <span asp-validation-for="DurationDays" class="text-sm text-rose-500"></span>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label asp-for="Price" class="form-label"></label>
-                            <div class="input-group">
-                                <span class="input-group-text">$</span>
-                                <input asp-for="Price" class="form-control" type="number" step="0.01" min="0"/>
+                        <div class="form-field">
+                            <label asp-for="Price" class="form-label">Price</label>
+                            <div class="relative">
+                                <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-slate-400">$</span>
+                                <input asp-for="Price" class="input pl-8" type="number" step="0.01" min="0" />
                             </div>
-                            <span asp-validation-for="Price" class="text-danger"></span>
+                            <span asp-validation-for="Price" class="text-sm text-rose-500"></span>
                         </div>
-                        <div class="col-md-4 mb-3">
-                            <label asp-for="GroupSizeLimit" class="form-label"></label>
-                            <input asp-for="GroupSizeLimit" class="form-control" type="number" min="1"/>
-                            <span asp-validation-for="GroupSizeLimit" class="text-danger"></span>
+                        <div class="form-field">
+                            <label asp-for="GroupSizeLimit" class="form-label">Group size</label>
+                            <input asp-for="GroupSizeLimit" class="input" type="number" min="1" />
+                            <span asp-validation-for="GroupSizeLimit" class="text-sm text-rose-500"></span>
                         </div>
                     </div>
                 </div>
-                
-                <div class="col-md-4">
-                    <div class="mb-3">
-                        <label asp-for="ImagePath" class="form-label">Image Path</label>
-                        <input asp-for="ImagePath" class="form-control" placeholder="/images/yourphoto.jpg"/>
-                        <div class="form-text">Provide a path to your tour image (optional)</div>
+
+                <div class="space-y-6">
+                    <div class="form-field">
+                        <label asp-for="ImagePath" class="form-label">Image path</label>
+                        <input asp-for="ImagePath" class="input" placeholder="/images/yourphoto.jpg" />
+                        <p class="text-xs text-slate-400">Provide a relative path to your tour image (optional).</p>
                     </div>
-                    
-                    <div class="card bg-light">
-                        <div class="card-body">
-                            <h6 class="card-title">Tour Image Preview</h6>
-                            <img src="@(string.IsNullOrWhiteSpace(Model.ImagePath) 
-                                ? Url.Content("~/images/placeholder.jpg") 
-                                : Url.Content(Model.ImagePath))"
-                                asp-append-version="true"
-                                class="img-fluid rounded" 
-                                style="max-height: 200px;"
-                                alt="Tour image preview" />
-                        </div>
+                    <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
+                        <h3 class="text-sm font-semibold text-slate-700">Image preview</h3>
+                        <img src="@(string.IsNullOrWhiteSpace(Model.ImagePath) ? Url.Content("~/images/placeholder.jpg") : Url.Content(Model.ImagePath))" asp-append-version="true" alt="Tour image preview" class="mt-3 h-48 w-full rounded-xl object-cover" />
                     </div>
                 </div>
             </div>
 
-            <h4 class="mt-4 mb-3">Tour Dates</h4>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Capacity</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    @for (int i = 0; i < Model.NewDates.Count; i++)
-                    {
-                        <tr>
-                            <td>
-                                <input asp-for="NewDates[@i].Date" class="form-control" type="date" />
-                            </td>
-                            <td>
-                                <input asp-for="NewDates[@i].Capacity" class="form-control" type="number" min="1" />
-                            </td>
-                            <td>
-                                <button type="button" class="btn btn-outline-danger btn-sm" onclick="removeDate(this)">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    }
-                    </tbody>
-                </table>
-            </div>
-            
-            <button type="button" class="btn btn-outline-primary mb-3" onclick="addDate()">
-                <i class="fas fa-plus me-1"></i>Add Date
-            </button>
+            <div class="space-y-4">
+                <div class="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <h2 class="section-title text-xl">Tour dates</h2>
+                        <p class="section-subtitle">Define multiple departures and capacities.</p>
+                    </div>
+                    <button type="button" class="btn-outline inline-flex items-center gap-2 px-4 py-2" data-add-date>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+                        </svg>
+                        Add date
+                    </button>
+                </div>
 
-            <div class="d-flex justify-content-between mt-4">
-                <a asp-action="MyPackages" class="btn btn-secondary">Cancel</a>
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-save me-1"></i>Save Package
-                </button>
+                <div class="table-shell">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Capacity</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100" data-dates-table>
+                        @for (int i = 0; i < Model.NewDates.Count; i++)
+                        {
+                            <tr>
+                                <td class="px-4 py-3">
+                                    <input asp-for="NewDates[@i].Date" class="input" type="date" />
+                                </td>
+                                <td class="px-4 py-3">
+                                    <input asp-for="NewDates[@i].Capacity" class="input" type="number" min="1" />
+                                </td>
+                                <td class="px-4 py-3 text-right">
+                                    <button type="button" class="btn-outline px-3 py-1 text-xs" data-remove-date>
+                                        Remove
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3 sm:flex-row sm:justify-between">
+                <a asp-action="MyPackages" class="btn-outline px-5 py-2.5 text-center">Cancel</a>
+                <button type="submit" class="btn-primary px-5 py-2.5">Save package</button>
             </div>
         </form>
     </div>
-</div>
+</section>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
     <script>
-        function addDate() {
-            var table = document.querySelector('tbody');
-            var rowCount = table.rows.length;
-            var row = table.insertRow(-1);
-            
-            var cell1 = row.insertCell(0);
-            var cell2 = row.insertCell(1);
-            var cell3 = row.insertCell(2);
-            
-            cell1.innerHTML = '<input name="NewDates[' + rowCount + '].Date" class="form-control" type="date" />';
-            cell2.innerHTML = '<input name="NewDates[' + rowCount + '].Capacity" class="form-control" type="number" min="1" />';
-            cell3.innerHTML = '<button type="button" class="btn btn-outline-danger btn-sm" onclick="removeDate(this)"><i class="fas fa-trash"></i></button>';
-        }
-        
-        function removeDate(button) {
-            var row = button.parentNode.parentNode;
-            row.parentNode.removeChild(row);
-        }
+        (function () {
+            const tableBody = document.querySelector('[data-dates-table]');
+            const addButton = document.querySelector('[data-add-date]');
+
+            function bindRemoveButtons(scope) {
+                (scope || tableBody).querySelectorAll('[data-remove-date]').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        const row = button.closest('tr');
+                        if (row) {
+                            row.remove();
+                            renumberRows();
+                        }
+                    });
+                });
+            }
+
+            function renumberRows() {
+                tableBody.querySelectorAll('tr').forEach(function (row, index) {
+                    row.querySelectorAll('input').forEach(function (input) {
+                        if (input.name.includes('NewDates[')) {
+                            if (input.name.endsWith('.Date')) {
+                                input.name = `NewDates[${index}].Date`;
+                            } else if (input.name.endsWith('.Capacity')) {
+                                input.name = `NewDates[${index}].Capacity`;
+                            }
+                        }
+                    });
+                });
+            }
+
+            function createRow(index) {
+                const row = document.createElement('tr');
+                row.className = 'divide-y divide-slate-100';
+                row.innerHTML = `
+                    <td class="px-4 py-3">
+                        <input name="NewDates[${index}].Date" class="input" type="date" />
+                    </td>
+                    <td class="px-4 py-3">
+                        <input name="NewDates[${index}].Capacity" class="input" type="number" min="1" />
+                    </td>
+                    <td class="px-4 py-3 text-right">
+                        <button type="button" class="btn-outline px-3 py-1 text-xs" data-remove-date>Remove</button>
+                    </td>`;
+                bindRemoveButtons(row);
+                return row;
+            }
+
+            addButton?.addEventListener('click', function () {
+                const nextIndex = tableBody.querySelectorAll('tr').length;
+                const row = createRow(nextIndex);
+                tableBody.appendChild(row);
+            });
+
+            bindRemoveButtons();
+        })();
     </script>
 }

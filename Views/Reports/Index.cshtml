@@ -1,22 +1,36 @@
 @model IEnumerable<TourismApp.Controllers.ReportRow>
 @{
-  ViewData["Title"] = "Reports";
+    ViewData["Title"] = "Reports";
 }
-<h2>Booking Activity Report</h2>
-<table class="table table-bordered table-sm">
-  <thead class="table-light">
-    <tr><th>Package</th><th>Status</th><th>#Bookings</th><th>Participants</th><th>Revenue (Paid)</th></tr>
-  </thead>
-  <tbody>
-  @foreach (var r in Model)
-  {
-    <tr>
-      <td>@r.PackageTitle</td>
-      <td>@r.Status</td>
-      <td>@r.Bookings</td>
-      <td>@r.Participants</td>
-      <td>@r.Revenue</td>
-    </tr>
-  }
-  </tbody>
-</table>
+
+<section class="space-y-6">
+    <div>
+        <h1 class="heading">Booking activity report</h1>
+        <p class="section-subtitle">Snapshot of demand, participants, and realised revenue across packages.</p>
+    </div>
+    <div class="table-shell">
+        <table>
+            <thead>
+                <tr>
+                    <th>Package</th>
+                    <th>Status</th>
+                    <th>Bookings</th>
+                    <th>Participants</th>
+                    <th>Revenue (Paid)</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+            @foreach (var row in Model)
+            {
+                <tr>
+                    <td class="px-4 py-3 text-sm font-semibold text-slate-900">@row.PackageTitle</td>
+                    <td class="px-4 py-3 text-sm text-slate-600">@row.Status</td>
+                    <td class="px-4 py-3 text-sm text-slate-600">@row.Bookings</td>
+                    <td class="px-4 py-3 text-sm text-slate-600">@row.Participants</td>
+                    <td class="px-4 py-3 text-sm font-medium text-slate-900">$@row.Revenue</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

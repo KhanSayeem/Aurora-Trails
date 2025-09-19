@@ -1,0 +1,162 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --primary: 221.2 83.2% 53.3%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --accent: 160.6 81.9% 39.6%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --ring: 221.2 83.2% 53.3%;
+    --radius: 0.75rem;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-slate-950/5 text-slate-800 antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .form-field {
+    @apply flex flex-col gap-2;
+  }
+
+  .form-label {
+    @apply text-sm font-medium text-slate-600;
+  }
+
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm transition focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20;
+  }
+
+  .input-textarea {
+    @apply input min-h-[140px];
+  }
+
+  .table-shell {
+    @apply w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm;
+  }
+
+  .table-shell table {
+    @apply w-full min-w-full divide-y divide-slate-100;
+  }
+
+  .table-shell thead {
+    @apply bg-slate-50/80;
+  }
+
+  .table-shell th {
+    @apply px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500;
+  }
+
+  .table-shell td {
+    @apply px-4 py-3 text-sm text-slate-700;
+  }
+
+  .empty-state {
+    @apply flex flex-col items-center justify-center gap-3 rounded-3xl border border-dashed border-slate-200 bg-slate-50/60 px-6 py-14 text-center text-slate-500;
+  }
+
+  .section-title {
+    @apply text-2xl font-semibold tracking-tight text-slate-900;
+  }
+
+  .section-subtitle {
+    @apply text-sm text-slate-500;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center whitespace-nowrap rounded-lg text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply ring-offset-background;
+  }
+
+  .btn-primary {
+    @apply btn bg-primary text-primary-foreground shadow hover:bg-primary/90;
+  }
+
+  .btn-secondary {
+    @apply btn bg-secondary text-secondary-foreground hover:bg-secondary/80;
+  }
+
+  .btn-outline {
+    @apply btn border border-border bg-transparent hover:bg-secondary;
+  }
+
+  .card {
+    @apply rounded-2xl bg-card text-card-foreground shadow-subtle ring-1 ring-slate-100/80;
+  }
+
+  .card-muted {
+    @apply rounded-2xl bg-slate-50 text-slate-600 shadow-sm ring-1 ring-slate-200/60;
+  }
+
+  .heading {
+    @apply text-3xl font-semibold tracking-tight text-slate-900;
+  }
+
+  .subheading {
+    @apply text-base text-slate-500;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-medium text-slate-600;
+  }
+
+  .badge-success {
+    @apply bg-emerald-500/10 text-emerald-600;
+  }
+
+  .badge-warning {
+    @apply bg-amber-500/10 text-amber-600;
+  }
+
+  .badge-info {
+    @apply bg-sky-500/10 text-sky-600;
+  }
+
+  .badge-danger {
+    @apply bg-rose-500/10 text-rose-600;
+  }
+
+  .nav-link {
+    @apply text-sm font-medium text-slate-600 transition hover:text-slate-900;
+  }
+
+  .nav-link-active {
+    @apply text-slate-900;
+  }
+
+    .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }  .nav-menu-item {
+    @apply flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900;
+  }
+}
+
+
