@@ -104,8 +104,16 @@ Tourists can browse tours, create bookings, and leave feedback. Agency users man
 ## 7. Useful Commands
 
 ```bash
-# apply migrations again if needed
+# apply migrations
 dotnet ef database update
+
+# build the project
+dotnet build
+# if the above fails, specify the project file:
+# dotnet build TourismApp.csproj
+
+# run the application
+dotnet run
 
 # publish for production
 dotnet publish -c Release -o ./publish

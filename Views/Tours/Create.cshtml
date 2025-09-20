@@ -63,12 +63,12 @@
                 <div class="space-y-6">
                     <div class="form-field">
                         <label asp-for="ImagePath" class="form-label">Image path</label>
-                        <input asp-for="ImagePath" class="input" placeholder="/images/yourphoto.jpg" />
+                        <input asp-for="ImagePath" class="input" placeholder="/images/yourphoto.jpg" id="imagePathInput" />
                         <p class="text-xs text-slate-400">Provide a relative path to your tour image (optional).</p>
                     </div>
                     <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5">
                         <h3 class="text-sm font-semibold text-slate-700">Image preview</h3>
-                        <img src="@(string.IsNullOrWhiteSpace(Model.ImagePath) ? Url.Content("~/images/placeholder.jpg") : Url.Content(Model.ImagePath))" asp-append-version="true" alt="Tour image preview" class="mt-3 h-48 w-full rounded-xl object-cover" />
+                        <img src="@Url.Content("~/images/placeholder.jpg")" asp-append-version="true" alt="Tour image preview" class="mt-3 h-48 w-full rounded-xl object-cover" id="imagePreview" />
                     </div>
                 </div>
             </div>
@@ -183,6 +183,39 @@
             });
 
             bindRemoveButtons();
+        })();
+
+        // Image preview functionality
+        (function () {
+            const imagePathInput = document.getElementById('imagePathInput');
+            const imagePreview = document.getElementById('imagePreview');
+            const placeholderSrc = '@Url.Content("~/images/placeholder.jpg")';
+
+            function updateImagePreview() {
+                const imagePath = imagePathInput.value.trim();
+                if (imagePath) {
+                    // If path starts with /, treat as relative to root
+                    const fullPath = imagePath.startsWith('/') ? imagePath : '/' + imagePath;
+                    imagePreview.src = fullPath;
+
+                    // Handle image load error by falling back to placeholder
+                    imagePreview.onerror = function() {
+                        imagePreview.src = placeholderSrc;
+                        imagePreview.onerror = null; // Prevent infinite loop
+                    };
+                } else {
+                    imagePreview.src = placeholderSrc;
+                    imagePreview.onerror = null;
+                }
+            }
+
+            // Update preview on input change
+            imagePathInput?.addEventListener('input', updateImagePreview);
+
+            // Initialize preview if there's already a value
+            if (imagePathInput?.value) {
+                updateImagePreview();
+            }
         })();
     </script>
 }

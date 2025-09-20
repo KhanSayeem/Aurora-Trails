@@ -197,27 +197,24 @@
     </div>
 </section>
 
-@if (User.IsInRole("Tourist"))
-{
-    <section class="mt-16">
-        <div class="card overflow-hidden bg-slate-900 text-slate-50">
-            <div class="grid gap-8 p-8 lg:grid-cols-[1fr,1.2fr] lg:items-center">
-                <div class="space-y-4">
-                    <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Project team</p>
-                    <h2 class="text-2xl font-semibold">Student collaborators behind Aurora Trails</h2>
-                    <p class="text-sm text-slate-300">This platform is crafted with care by our development cohort. Meet the student team and their identifiers below.</p>
-                </div>
-                <div class="grid gap-3 sm:grid-cols-2">
-                    @foreach (var member in teamMembers)
-                    {
-                        <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                            <p class="text-sm font-semibold">@member.Name</p>
-                            <p class="text-xs uppercase tracking-wide text-slate-300">@member.Id</p>
-                        </div>
-                    }
-                </div>
+<section class="mt-16">
+    <div class="card overflow-hidden bg-slate-900 text-slate-50">
+        <div class="grid gap-8 p-8 lg:grid-cols-[1fr,1.2fr] lg:items-center">
+            <div class="space-y-4">
+                <p class="text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">Project team</p>
+                <h2 class="text-2xl font-semibold">Student collaborators behind Aurora Trails</h2>
+                <p class="text-sm text-slate-300">This platform is crafted with care by our development cohort. Meet the student team and their identifiers below.</p>
+            </div>
+            <div class="grid gap-3 sm:grid-cols-2">
+                @foreach (var member in teamMembers)
+                {
+                    <div class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                        <p class="text-sm font-semibold">@member.Name</p>
+                        <p class="text-xs uppercase tracking-wide text-slate-300">@member.Id</p>
+                    </div>
+                }
             </div>
         </div>
-    </section>
-}
+    </div>
+</section>
 

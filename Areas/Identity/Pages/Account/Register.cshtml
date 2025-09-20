@@ -1,7 +1,7 @@
 ﻿@page
 @model RegisterModel
 @{
-    ViewData["Title"] = "Register as Tourist";
+    ViewData["Title"] = "Register";
 }
 
 <div class="row justify-content-center">
@@ -12,7 +12,7 @@
             </div>
             <div class="card-body">
                 <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-                    <h4>Create a new tourist account.</h4>
+                    <h4>Create a new account.</h4>
                     <hr />
                     <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                     <div class="form-floating mb-3">
@@ -36,14 +36,8 @@
                             I agree to the <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">Terms and Conditions</a>
                         </label>
                     </div>
-                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register as Tourist</button>
+                    <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
                 </form>
-                <div class="text-center mt-3">
-                    <small class="text-muted">
-                        <i class="fas fa-info-circle me-1"></i>
-                        Note: Only tourists can register. Agencies should contact us directly.
-                    </small>
-                </div>
             </div>
         </div>
     </div>
