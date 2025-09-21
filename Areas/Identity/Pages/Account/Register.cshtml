@@ -30,6 +30,22 @@
                         <label asp-for="Input.ConfirmPassword">Confirm Password</label>
                         <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
                     </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.UserType" class="form-label">I am registering as:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Input.UserType" id="tourist" value="Tourist" checked>
+                            <label class="form-check-label" for="tourist">
+                                <strong>Tourist</strong> - I want to book and explore tours
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="Input.UserType" id="agency" value="Agency">
+                            <label class="form-check-label" for="agency">
+                                <strong>Travel Agency</strong> - I want to create and manage tour packages
+                            </label>
+                        </div>
+                        <span asp-validation-for="Input.UserType" class="text-danger"></span>
+                    </div>
                     <div class="form-check mb-3">
                         <input class="form-check-input" type="checkbox" value="" id="termsCheck" required>
                         <label class="form-check-label" for="termsCheck">
@@ -59,7 +75,7 @@
                 <p>Our platform connects tourists with travel agencies offering various tour packages.</p>
                 
                 <h6>3. User Responsibilities</h6>
-                <p>As a tourist, you are responsible for providing accurate information and following booking guidelines.</p>
+                <p>You are responsible for providing accurate information and following the appropriate guidelines for your role (tourist or agency).</p>
                 
                 <h6>4. Privacy Policy</h6>
                 <p>We protect your personal information in accordance with our privacy policy.</p>

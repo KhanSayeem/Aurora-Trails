@@ -84,6 +84,7 @@ namespace TourismApp.Controllers
             }
 
             var existing = await _ctx.AgencyProfiles.FirstOrDefaultAsync(p => p.UserId == uid);
+            bool isNewProfile = existing == null;
             
             if (existing == null)
             {
@@ -98,8 +99,17 @@ namespace TourismApp.Controllers
             }
 
             await _ctx.SaveChangesAsync();
-            TempData["Msg"] = "Profile updated successfully!";
-            return RedirectToAction(nameof(Agency));
+
+            if (isNewProfile)
+            {
+                TempData["Msg"] = "Welcome! Your agency profile has been created successfully.";
+                return RedirectToAction("AgencyDashboard", "Home");
+            }
+            else
+            {
+                TempData["Msg"] = "Profile updated successfully!";
+                return RedirectToAction(nameof(Agency));
+            }
         }
     }
 }

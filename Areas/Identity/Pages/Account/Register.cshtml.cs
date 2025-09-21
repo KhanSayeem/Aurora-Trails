@@ -98,6 +98,10 @@ namespace TourismApp.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "User Type")]
+            public string UserType { get; set; }
         }
 
 
@@ -123,8 +127,9 @@ namespace TourismApp.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // Automatically assign the "Tourist" role to new registrations
-                    await _userManager.AddToRoleAsync(user, "Tourist");
+                    // Assign role based on user selection
+                    string role = Input.UserType == "Agency" ? "Agency" : "Tourist";
+                    await _userManager.AddToRoleAsync(user, role);
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -145,7 +150,16 @@ namespace TourismApp.Areas.Identity.Pages.Account
                     else
                     {
                         await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+
+                        // Redirect based on user role
+                        if (Input.UserType == "Agency")
+                        {
+                            return RedirectToAction("Agency", "Profile");
+                        }
+                        else
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
                     }
                 }
                 foreach (var error in result.Errors)
