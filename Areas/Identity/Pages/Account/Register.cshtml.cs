@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using TourismApp.Models;
+using TourismApp.Data;
 
 namespace TourismApp.Areas.Identity.Pages.Account
 {
@@ -30,13 +31,15 @@ namespace TourismApp.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly ApplicationDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            ApplicationDbContext context)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -44,6 +47,7 @@ namespace TourismApp.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
         /// <summary>
@@ -131,6 +135,19 @@ namespace TourismApp.Areas.Identity.Pages.Account
                     string role = Input.UserType == "Agency" ? "Agency" : "Tourist";
                     await _userManager.AddToRoleAsync(user, role);
 
+                    // Create profile based on user type
+                    if (Input.UserType == "Agency")
+                    {
+                        var agencyProfile = new AgencyProfile
+                        {
+                            UserId = user.Id,
+                            AgencyName = "My Agency", // Default name, user can change later
+                            Description = "Welcome to my agency! Please update this description."
+                        };
+                        _context.AgencyProfiles.Add(agencyProfile);
+                        await _context.SaveChangesAsync();
+                    }
+
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -154,7 +171,7 @@ namespace TourismApp.Areas.Identity.Pages.Account
                         // Redirect based on user role
                         if (Input.UserType == "Agency")
                         {
-                            return RedirectToAction("Agency", "Profile");
+                            return RedirectToAction("AgencyDashboard", "Home");
                         }
                         else
                         {

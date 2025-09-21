@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using TourismApp.Data;
 using TourismApp.Models.ViewModels;
+using TourismApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 
@@ -14,11 +15,8 @@ namespace TourismApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            // Check if user is authenticated and is an agency
-            if (User.Identity.IsAuthenticated && User.IsInRole("Agency"))
-            {
-                return RedirectToAction("AgencyDashboard");
-            }
+            // Remove the automatic redirect to AgencyDashboard
+            // We'll let the user navigate there manually after login
 
             var tours = await _ctx.TourPackages
                 .Include(t => t.AgencyProfile)
@@ -36,10 +34,18 @@ namespace TourismApp.Controllers
             
             var agency = await _ctx.AgencyProfiles
                 .FirstOrDefaultAsync(a => a.UserId == uid);
-                
+
             if (agency == null)
             {
-                return NotFound();
+                // Auto-create agency profile for existing users who don't have one
+                agency = new AgencyProfile
+                {
+                    UserId = uid,
+                    AgencyName = "My Agency",
+                    Description = "Welcome to my agency! Please update this description."
+                };
+                _ctx.AgencyProfiles.Add(agency);
+                await _ctx.SaveChangesAsync();
             }
 
             // Get agency tour packages

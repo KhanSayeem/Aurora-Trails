@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TourismApp.Data;
+using TourismApp.Models;
 
 namespace TourismApp.Controllers
 {
@@ -16,7 +17,18 @@ namespace TourismApp.Controllers
         {
             var uid = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var agency = await _ctx.AgencyProfiles.FirstOrDefaultAsync(a => a.UserId == uid);
-            if (agency == null) return Unauthorized();
+            if (agency == null)
+            {
+                // Auto-create agency profile for existing users who don't have one
+                agency = new AgencyProfile
+                {
+                    UserId = uid,
+                    AgencyName = "My Agency",
+                    Description = "Welcome to my agency! Please update this description."
+                };
+                _ctx.AgencyProfiles.Add(agency);
+                await _ctx.SaveChangesAsync();
+            }
 
             var data = await _ctx.Bookings
                 .Include(b => b.TourDate).ThenInclude(td => td.TourPackage)
